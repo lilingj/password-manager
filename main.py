@@ -27,19 +27,19 @@ def save():
         return
     else:
         try:
-            os.rename("pwdb.pkl", "pwdb.pkl.bak")
+            os.rename(db_path, db_path + ".bak")
         except:
             pass
         for pw in pws:
             pw.encrypt(rsa_obj)
-        mypw.store_mypws(pws)
+        mypw.store_mypws(pws, db_path)
 
 def main_menu():
     print_menu(
         [
             "默认载入公私钥和数据(public.key private.key pwdb.pkl)",
-            "生成公私钥, 重置数据",
             "退出",
+            "生成公私钥, 重置数据(慎用, 确保数据已经备份)",
         ]
     )
 
@@ -47,8 +47,8 @@ def main_menu():
     
     mp = {
         1: lambda: mypw.load_mypws(),
-        2: lambda: get_verify_input(),
-        3: lambda: False,
+        2: lambda: False,
+        3: lambda: get_verify_input(),
     }
 
     data = mp[opt]()
@@ -56,11 +56,11 @@ def main_menu():
         save()
         return
     elif data == True:
-        pass
+        rsa_obj.gen_keys(public_key_path, private_key_path)
     else:
+        rsa_obj.load_keys(public_key_path, private_key_path)
         global pws
         pws = data
-        show_all()
         for pw in pws:
             pw.decrypt(rsa_obj)
     
@@ -133,6 +133,7 @@ def search_menu():
         for s in [pw.url, pw.username, pw.password, pw.note]:
             if keyword in s:
                 print(str(pw))
+                break
     print("检索完毕!全部结果已经打出")
 
 
@@ -144,6 +145,10 @@ def show_all():
         print(pws[i].format_str(i))
     print("┗----┴--------------------┴--------------------┴--------------------┴--------------------┛")
 
+# config
+public_key_path = "public.key"
+private_key_path = "private.key"
+db_path = "pwdb.pkl"
 
 rsa_obj = myrsa.RsaObj()
 pws = []
