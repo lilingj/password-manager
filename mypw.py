@@ -26,7 +26,7 @@ class MyPW:
         return ret
 
     def format_str(self, id):
-        return "|{:4d}|{:20s}|{:20s}|{:20s}|{:20s}|".format(id, str(self.url), str(self.username), str(self.password), str(self.note))
+        return "|{:4d}|{:30s}|{:20s}|{:20s}|{:20s}|".format(id, str(self.url), str(self.username), str(self.password), str(self.note))
 
     def gen_pw(self):
         self.password = \

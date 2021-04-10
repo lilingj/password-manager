@@ -23,16 +23,13 @@ def print_menu(opts: List[str]):
     print("┗-------------------------------------------------------------┛")
 
 def save():
-    if pws == []:
-        return
-    else:
-        try:
-            os.rename(db_path, db_path + ".bak")
-        except:
-            pass
-        for pw in pws:
-            pw.encrypt(rsa_obj)
-        mypw.store_mypws(pws, db_path)
+    try:
+        os.rename(db_path, db_path + ".bak")
+    except:
+        pass
+    for pw in pws:
+        pw.encrypt(rsa_obj)
+    mypw.store_mypws(pws, db_path)
 
 def main_menu():
     print_menu(
@@ -53,7 +50,6 @@ def main_menu():
 
     data = mp[opt]()
     if data == False:
-        save()
         return
     elif data == True:
         rsa_obj.gen_keys(public_key_path, private_key_path)
@@ -138,12 +134,12 @@ def search_menu():
 
 
 def show_all():
-    print("┏----┬--------------------┬--------------------┬--------------------┬--------------------┓")
-    print("|id  |url                 | username           | password           | note               |")
-    print("├----+--------------------+--------------------+--------------------+--------------------┤")
+    print("┏----┬------------------------------┬--------------------┬--------------------┬--------------------┓")
+    print("|id  |url                           | username           | password           | note               |")
+    print("├----+------------------------------+--------------------+--------------------+--------------------┤")
     for i in range(len(pws)):
         print(pws[i].format_str(i))
-    print("┗----┴--------------------┴--------------------┴--------------------┴--------------------┛")
+    print("┗----┴------------------------------┴--------------------┴--------------------┴--------------------┛")
 
 # config
 public_key_path = "public.key"
